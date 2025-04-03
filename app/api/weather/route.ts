@@ -1,31 +1,24 @@
 // app/api/weather/route.ts
-import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { getWeatherData } from '@/weather';
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
   const location = searchParams.get('location');
-  
+
   if (!location) {
-    return NextResponse.json({ error: 'Location parameter is required' }, { status: 400 });
+    return new Response(JSON.stringify({ error: 'Location is required' }), { status: 400 });
   }
 
-  const apiKey = process.env.WEATHER_API_KEY;
-  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=${apiKey}&contentType=json`;
-
   try {
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error('Weather data not available');
-    }
-    
-    const data = await response.json();
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Error fetching weather data:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch weather data' }, 
-      { status: 500 }
-    );
+    const weatherData = await getWeatherData(location);
+    return new Response(JSON.stringify(weatherData), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error: any) {
+    return new Response(JSON.stringify({ error: error.message || 'Error fetching weather data' }), {
+      status: 500,
+    });
   }
 }

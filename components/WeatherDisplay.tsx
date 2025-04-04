@@ -1,5 +1,5 @@
 // components/WeatherDisplay.tsx
-import { WeatherData } from '@/types/weather';
+import { WeatherData } from '@/types';
 
 type WeatherDisplayProps = {
   weatherData: WeatherData;

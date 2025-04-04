@@ -3,7 +3,7 @@
 
 import { useState, FormEvent } from 'react';
 import WeatherDisplay from '@/components/WeatherDisplay';
-import { WeatherData } from '@/types/weather';
+import { WeatherData } from '@/types';
 
 export default function Home() {
   const [location, setLocation] = useState('');

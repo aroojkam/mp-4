@@ -1,4 +1,4 @@
-// types/weather.ts
+// types.ts
 export interface WeatherData {
     resolvedAddress: string;
     days: WeatherDay[];
